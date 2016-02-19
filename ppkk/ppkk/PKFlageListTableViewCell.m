@@ -15,21 +15,27 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        [self addSubview:self.label];
+        [self addSubview:self.uName];
         
     }
     return self;
+    
 }
 
-- (UILabel *)label{
-    if (!_label) {
-        _label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, VIEW_WIDTH, 80)];
-        [_label setText:@"sjhdfsjhfjdskhf"];
-        _label.font = [UIFont systemFontOfSize:16];
-        [_label setTextColor:[UIColor yellowColor]];
+- (UILabel *)uName {
+    if (!_uName) {
+        _uName = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, VIEW_WIDTH, 80)];
+        _uName.font = [UIFont systemFontOfSize:16];
+        [_uName setTextColor:[UIColor yellowColor]];
     }
-    return _label;
+    return _uName;
 }
+- (void)addConstraints {
+
+
+    
+}
+
 - (void)awakeFromNib {
     // Initialization code
 }

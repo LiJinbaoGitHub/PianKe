@@ -9,18 +9,21 @@
 #import "PKHomeViewController.h"
 #import "PKLeftMenuViewController.h"
 #import "ZJPNavigationController.h"
-#import "RESideMenu.h"
-#import "PKFlagView.h"
-#import "PKLightningView.h"
-#import "PKDebrisView.h"
+#import "RESideMenu.h"       // 侧边栏
+#import "PKFlagView.h"      // 旗帜table
+#import "PKLightningView.h" // 闪电
+#import "PKDebrisView.h"    // 碎片
+#import "MJRefresh.h"
+
 
 @interface PKHomeViewController ()<UIScrollViewDelegate>
-@property (strong,nonatomic) UIView* topView;
-@property (strong,nonatomic) UIScrollView* scrollView;
-@property (strong,nonatomic) UIButton* flagButton;
-@property (strong,nonatomic) UIButton* lightningButton;
-@property (strong,nonatomic) UIButton* debrisButton;
-@property (strong,nonatomic) PKFlagView* flageTableView;
+@property (strong, nonatomic)  UIView* topView;
+@property (strong, nonatomic)  UIScrollView* scrollView;
+@property (strong, nonatomic)  UIButton* flagButton;
+@property (strong, nonatomic)  UIButton* lightningButton;
+@property (strong, nonatomic)  UIButton* debrisButton;
+@property (strong, nonatomic)  PKFlagView* flageTableView; // table
+
 @end
 
 @implementation PKHomeViewController{
@@ -177,9 +180,10 @@
 
     
 }
+
 - (PKFlagView *)flageTableView{
     if (!_flageTableView) {
-        _flageTableView = [[PKFlagView alloc] initWithFrame:CGRectMake(0, 0, VIEW_WIDTH, VIEW_HEIGHT-64) style:UITableViewStyleGrouped];
+        _flageTableView = [[PKFlagView alloc] initWithFrame:CGRectMake(0, 0, VIEW_WIDTH, VIEW_HEIGHT) style:UITableViewStyleGrouped];
         self.flageTableView.bounces = NO;
     }
     return _flageTableView;

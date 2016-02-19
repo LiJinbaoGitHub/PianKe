@@ -16,6 +16,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     //状态栏
+    [self.navigationController setNavigationBarHidden:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     UIView * statuesBarBack = [[UIView alloc]initWithFrame:CGRectMake(0, -20, VIEW_WIDTH, 40)];
     statuesBarBack.backgroundColor = [UIColor blackColor];

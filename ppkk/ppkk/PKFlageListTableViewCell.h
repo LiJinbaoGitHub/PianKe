@@ -9,5 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface PKFlageListTableViewCell : UITableViewCell
-@property (strong,nonatomic) UILabel* label;
+/** 用户名 */
+@property (strong, nonatomic) UILabel *uName;
+/**大标题*/
+@property (strong, nonatomic) UILabel* title;
+/** 图片 */
+@property (strong, nonatomic) UIImageView *imgView;
+/** 正文 */
+@property (strong, nonatomic) UILabel *text;
+
 @end

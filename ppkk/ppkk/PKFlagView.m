@@ -7,12 +7,14 @@
 //
 
 #import "PKFlagView.h"
-#import "PKFlageTableViewCell.h"
-#import "PKFlageListTableViewCell.h"
+#import "PKFlageTableViewCell.h"     // 轮播视图
+#import "PKFlageListTableViewCell.h" // 列表数据视图
+#import "MJRefresh.h"
+#import "PKFlagListModel.h"
 
 @interface PKFlagView()<UITableViewDataSource,UITableViewDelegate>
 
-
+@property (strong, nonatomic)          PKFlagListModel * flagListModel;
 @end
 
 
@@ -28,12 +30,28 @@
         
         [self registerClass:[PKFlageTableViewCell class] forCellReuseIdentifier:@"cell"];
         [self registerClass:[PKFlageListTableViewCell class] forCellReuseIdentifier:@"cellTwo"];
+        
+        [self reloadFragmentTabelData:0];
+        
+        WS(weakSelf);
+        //上拉加载的block回调方法
+        self.MoreDataBlock = ^(){
+            // 隐藏当前的上拉刷新控件
+            [weakSelf reloadFragmentTabelData:0];
+        };
+        //下拉加载的block回调方法
+        self.NewDataBlock = ^(){
+            [weakSelf reloadFragmentTabelData:10];
+        };
+
     }
     return self;
     
+}
+//网络请求数据
+- (void)reloadFragmentTabelData:(NSInteger)start{
     
 }
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 2;
 }

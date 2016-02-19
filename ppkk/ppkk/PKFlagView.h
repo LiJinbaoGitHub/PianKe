@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+
+typedef void(^loadNewDataBlock)();//加载新数据
+typedef void(^loadMoreDataBlock)();//加载更多数据
+
 @interface PKFlagView : UITableView
+
+@property (strong, nonatomic)           NSArray *FragmentModel;//碎片数据
+@property (strong, nonatomic)           NSArray *cellHeightArray;//高度数组
+@property (copy, nonatomic)             loadNewDataBlock NewDataBlock;
+@property (copy, nonatomic)             loadMoreDataBlock MoreDataBlock;
 
 @end
