@@ -9,6 +9,19 @@
 #import "PKFlagListModel.h"
 
 @implementation PKFlagListModel
+-(instancetype)initWithDictionary:(NSDictionary *)dictionary
+{
+    self = [super init];
+    if(![dictionary[@"data"] isKindOfClass:[NSNull class]]){
+        self.data = [[Data alloc] initWithDictionary:dictionary[@"data"]];
+    }
+    
+    if(![dictionary[@"result"] isKindOfClass:[NSNull class]]){
+        self.result = [dictionary[@"result"] integerValue];
+    }
+    
+    return self;
+}
 
 @end
 /** */

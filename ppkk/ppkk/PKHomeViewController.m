@@ -14,6 +14,8 @@
 #import "PKLightningView.h" // 闪电
 #import "PKDebrisView.h"    // 碎片
 #import "MJRefresh.h"
+#import "PKFlagListModel.h"
+#import "NSArray+PKFlageCellHeight.h"
 
 
 @interface PKHomeViewController ()<UIScrollViewDelegate>
@@ -113,13 +115,69 @@
     self.debrisButton = debrisButton;
     [self.view bringSubviewToFront:self.topView];
     [flagView addSubview:self.flageTableView];
+
+    [self reloadFragmentTabelData:0];
+    //
+    WS(weakSelf);
+    //上拉加载的block回调方法
+    self.flageTableView.MoreDataBlock = ^(){
+        // 隐藏当前的上拉刷新控件
+        [weakSelf reloadFragmentTabelData:0];
+    };
+    //下拉加载的block回调方法
+    self.flageTableView.NewDataBlock = ^(){
+        [weakSelf reloadFragmentTabelData:10];
+    };
     
 }
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
 
 }
-
+///网络请求数据
+- (void)reloadFragmentTabelData:(NSInteger)start{
+    //制作请求参数
+    NSDictionary *requestDic =@{
+                                @"auth":@"",
+                                @"client":@"1",
+                                @"deviceid":@"A55AF7DB-88C8-408D-B983-D0B9C9CA0B36",
+                                @"limit":@"10",
+                                @"start":[NSString stringWithFormat:@"%li",start],
+                                @"version":@"3.0.6"
+                                };
+    WS(weakSelf);
+    //开始网络请求
+    [self POSTHttpRequest:@"http://api2.pianke.me/pub/today" dic:requestDic successBlock:^(id JSON) {
+        NSLog(@"%@",JSON);
+        NSDictionary *returnDic = JSON;
+        if ([returnDic[@"result"]integerValue] == 1) {
+            //将得到的模型转换成model
+            weakSelf.flageTableView.flagListModel = [[PKFlagListModel alloc]initWithDictionary:returnDic];
+            NSArray *heightArray = [NSArray countCellHeight:weakSelf.flageTableView.flagListModel.data.list];
+            
+            //tableview用来存储数据的数组
+            self.flageTableView.flageModel = self.flageTableView.flagListModel.data.list;
+            
+            //轮播图片数据
+            self.flageTableView.scrollArray = [returnDic[@"data"] valueForKey:@"carousel"];
+            
+            //给tableviewcell高度的数组赋值
+            weakSelf.flageTableView.cellHeightArray = heightArray;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.flageTableView reloadData];
+            });
+            
+        }
+        //结束刷新状态
+        [weakSelf.flageTableView.mj_footer endRefreshing];
+        [weakSelf.flageTableView.mj_header endRefreshing];
+        
+    } errorBlock:^(NSError *error) {
+        
+    }];
+    
+    
+}
 - (void)doClickBackAction{
     
     [self.sideMenuViewController presentLeftMenuViewController];
@@ -192,5 +250,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+//网络请求部分
 
 @end

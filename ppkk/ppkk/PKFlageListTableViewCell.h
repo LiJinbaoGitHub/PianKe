@@ -7,15 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PKFlagListModel.h"
 
 @interface PKFlageListTableViewCell : UITableViewCell
-/** 用户名 */
-@property (strong, nonatomic) UILabel *uName;
-/**大标题*/
-@property (strong, nonatomic) UILabel* title;
-/** 图片 */
-@property (strong, nonatomic) UIImageView *imgView;
-/** 正文 */
-@property (strong, nonatomic) UILabel *text;
+@property (strong, nonatomic)               List *counterList;
+@property (strong, nonatomic)               NSDictionary *heightDic;
+@property (strong, nonatomic)               NSDictionary *dataDic;//不用model用字典进行赋值时用的数据
 
 @end

@@ -11,10 +11,15 @@
 #import "PKFlageListTableViewCell.h" // 列表数据视图
 #import "MJRefresh.h"
 #import "PKFlagListModel.h"
+#import "PKBaseViewController.h"
+#import "NSArray+PKFlageCellHeight.h"
+#import "MJDIYHeader.h"
+#import "MJChiBaoZiHeader.h"
+#import "MJChiBaoZiFooter2.h"
 
 @interface PKFlagView()<UITableViewDataSource,UITableViewDelegate>
 
-@property (strong, nonatomic)          PKFlagListModel * flagListModel;
+@property (strong, nonatomic)          PKBaseViewController * baseViewCon;
 @end
 
 
@@ -28,30 +33,35 @@
         self.dataSource = self;
         self.delegate = self;
         
+        [self addRefreshControl];
+        
         [self registerClass:[PKFlageTableViewCell class] forCellReuseIdentifier:@"cell"];
         [self registerClass:[PKFlageListTableViewCell class] forCellReuseIdentifier:@"cellTwo"];
-        
-        [self reloadFragmentTabelData:0];
-        
-        WS(weakSelf);
-        //上拉加载的block回调方法
-        self.MoreDataBlock = ^(){
-            // 隐藏当前的上拉刷新控件
-            [weakSelf reloadFragmentTabelData:0];
-        };
-        //下拉加载的block回调方法
-        self.NewDataBlock = ^(){
-            [weakSelf reloadFragmentTabelData:10];
-        };
 
     }
     return self;
     
 }
-//网络请求数据
-- (void)reloadFragmentTabelData:(NSInteger)start{
+#pragma mark - add Refresh Control method
+
+- (void)addRefreshControl {
     
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    MJChiBaoZiHeader *header = [MJChiBaoZiHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    // 隐藏时间
+    header.lastUpdatedTimeLabel.hidden = YES;
+    // 隐藏状态
+    header.stateLabel.hidden = YES;
+    // 马上进入刷新状态
+    self.mj_header = header;
+    //设置上拉加载的动画
+    MJChiBaoZiFooter2 *footer = [MJChiBaoZiFooter2 footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+    footer.stateLabel.hidden = YES;
+    self.mj_footer.automaticallyChangeAlpha = YES;
+    self.mj_footer = footer;
 }
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 2;
 }
@@ -59,13 +69,16 @@
     if(section == 0){
         return 1;
     }
-    return 12;
+    return _cellHeightArray.count;;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
         return 180;
     }
-    return 80;
+    NSLog(@"%@", _cellHeightArray);
+    CGFloat height = [[_cellHeightArray[indexPath.row] valueForKey:@"cellHeight"] floatValue];
+    NSLog(@"heitht %lf",height);
+    return height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -89,10 +102,40 @@
     
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
 
-    
-    
+    if (_cellHeightArray) {
+        if ([cell isKindOfClass:[PKFlageListTableViewCell class]]) {
+            //传给cell的高度字典
+            [((PKFlageListTableViewCell *)cell) setHeightDic:(NSDictionary *)_cellHeightArray[indexPath.row]];
+            //传给cell的内容模型
+            ((PKFlageListTableViewCell *)cell).counterList = _flageModel[indexPath.row];
+        }
+    }
+    //传轮播图片给，PKFlageTableViewCell，中的array
+    if (indexPath.section == 0) {
+        NSMutableArray* array = [NSMutableArray array];
+        for (NSDictionary* dic in self.scrollArray) {
+            NSString* strImg = dic[@"img"];
+            [array addObject:strImg];
+        }
+        [((PKFlageTableViewCell*)cell) setScroImageWithArray:array];
+        
+    }
     return cell;
 }
+
+//下拉刷新全部数据
+- (void)loadMoreData{
+    if (_MoreDataBlock) {
+        _MoreDataBlock();
+    }
+}
+//上拉加载更多数据
+- (void)loadNewData{
+    if (_NewDataBlock) {
+        _NewDataBlock();
+    }
+}
+
 @end
 
 

@@ -38,6 +38,19 @@
 
 -(instancetype)initWithDictionary:(NSDictionary *)dictionary;
 @end
+///
+@interface PKFlagListModel : NSObject
+
+@property (nonatomic, strong) NSArray * carousel;
+//@property (nonatomic, strong) NSString * date;
+@property (nonatomic, strong) Data * data;
+@property (nonatomic, assign) NSInteger result;
+@property (nonatomic, strong) NSArray * list;
+@property (nonatomic, assign) NSInteger total;
+
+-(instancetype)initWithDictionary:(NSDictionary *)dictionary;
+@end
+
 /** 图片列表*/
 @interface Imglist : NSObject
 
@@ -132,6 +145,3 @@
 @end
 
 
-@interface PKFlagListModel : NSObject
-
-@end

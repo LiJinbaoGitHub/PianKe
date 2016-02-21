@@ -10,4 +10,6 @@
 
 @interface PKFlageTableViewCell : UITableViewCell
 
+
+- (void)setScroImageWithArray:(NSArray*)array;
 @end

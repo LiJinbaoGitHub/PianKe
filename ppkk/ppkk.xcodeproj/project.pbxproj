@@ -21,6 +21,7 @@
 		0463D4831C76000F00B82BE4 /* PKFlageListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463D4821C76000F00B82BE4 /* PKFlageListTableViewCell.m */; };
 		048D26AD1C770F1800EDB75D /* PKFlagListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 048D26AC1C770F1800EDB75D /* PKFlagListModel.m */; };
 		048D270F1C77465E00EDB75D /* PKFlageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 048D270E1C77465E00EDB75D /* PKFlageTableViewCell.m */; };
+		048D27131C78078D00EDB75D /* NSArray+PKFlageCellHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 048D27121C78078D00EDB75D /* NSArray+PKFlageCellHeight.m */; };
 		048DF7901C5721ED00F90947 /* PKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048DF78F1C5721ED00F90947 /* PKLoginViewController.m */; };
 		0493DF4E1C59A9A400B401BC /* PKFragmentTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 0493DF4D1C59A9A400B401BC /* PKFragmentTable.m */; };
 		0493DF511C59A9C900B401BC /* PKFragmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0493DF501C59A9C900B401BC /* PKFragmentTableViewCell.m */; };
@@ -173,6 +174,8 @@
 		048D26AB1C770F1800EDB75D /* PKFlagListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKFlagListModel.h; sourceTree = "<group>"; };
 		048D26AC1C770F1800EDB75D /* PKFlagListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKFlagListModel.m; sourceTree = "<group>"; };
 		048D270E1C77465E00EDB75D /* PKFlageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKFlageTableViewCell.m; sourceTree = "<group>"; };
+		048D27111C78078D00EDB75D /* NSArray+PKFlageCellHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+PKFlageCellHeight.h"; sourceTree = "<group>"; };
+		048D27121C78078D00EDB75D /* NSArray+PKFlageCellHeight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+PKFlageCellHeight.m"; sourceTree = "<group>"; };
 		048DF78E1C5721ED00F90947 /* PKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKLoginViewController.h; path = "登陆/注册/PKLoginViewController.h"; sourceTree = "<group>"; };
 		048DF78F1C5721ED00F90947 /* PKLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PKLoginViewController.m; path = "登陆/注册/PKLoginViewController.m"; sourceTree = "<group>"; };
 		0493DF4C1C59A9A400B401BC /* PKFragmentTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKFragmentTable.h; path = "碎片/View/PKFragmentTable.h"; sourceTree = "<group>"; };
@@ -461,6 +464,7 @@
 				048D270E1C77465E00EDB75D /* PKFlageTableViewCell.m */,
 				0463D4811C76000F00B82BE4 /* PKFlageListTableViewCell.h */,
 				0463D4821C76000F00B82BE4 /* PKFlageListTableViewCell.m */,
+				048D27101C78064300EDB75D /* tool */,
 				048D26AA1C770EC700EDB75D /* model */,
 			);
 			name = "精选";
@@ -491,6 +495,15 @@
 				048D26AC1C770F1800EDB75D /* PKFlagListModel.m */,
 			);
 			name = model;
+			sourceTree = "<group>";
+		};
+		048D27101C78064300EDB75D /* tool */ = {
+			isa = PBXGroup;
+			children = (
+				048D27111C78078D00EDB75D /* NSArray+PKFlageCellHeight.h */,
+				048D27121C78078D00EDB75D /* NSArray+PKFlageCellHeight.m */,
+			);
+			name = tool;
 			sourceTree = "<group>";
 		};
 		048DF78D1C57218300F90947 /* 注册 */ = {
@@ -1253,6 +1266,7 @@
 				04AF49061C5202B900787F7B /* UIImage+WebP.m in Sources */,
 				04DC34E21C54FE9D003A735B /* PKRadioViewController.m in Sources */,
 				0493DF7C1C5A006E00B401BC /* NSArray+PKFragmentCellHeight.m in Sources */,
+				048D27131C78078D00EDB75D /* NSArray+PKFlageCellHeight.m in Sources */,
 				04AF48E21C5202B900787F7B /* MJRefreshHeader.m in Sources */,
 				04AF48EC1C5202B900787F7B /* MJChiBaoZiFooter.m in Sources */,
 				04AF49081C5202B900787F7B /* UIImageView+WebCache.m in Sources */,
