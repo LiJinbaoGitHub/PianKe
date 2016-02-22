@@ -15,6 +15,8 @@
 @property (strong, nonatomic)           UILabel *contentLabelTitle;//内容标题
 @property (strong, nonatomic)           UILabel *contentLabelDetails;//内容详细
 @property (strong, nonatomic)           UIImageView *contentImage;//大图片
+@property (strong, nonatomic)           UIImageView *contentImageTwo;//大图片two
+@property (strong, nonatomic)           UIImageView *contentImageThree;//大图片three
 @property (strong, nonatomic)           UIButton *likeBtn;//喜欢
 @property (strong, nonatomic)           UILabel *LikeLabelNumber;//喜欢数辆
 @property (strong, nonatomic)           UILabel *BottomLineLabel;//线
@@ -33,6 +35,8 @@
         [self.contentView addSubview: self.likeBtn];
         [self.contentView addSubview: self.LikeLabelNumber];
         [self.contentView addSubview: self.BottomLineLabel];
+        [self.contentView addSubview: self.contentImageTwo];
+        [self.contentView addSubview: self.contentImageThree];
         self.autoresizingMask = UIViewAutoresizingNone;
         [self addAutoLayout];
     }
@@ -43,8 +47,10 @@
 - (void)setCounterList:(List *)counterList{
     _counterList = counterList;
     _userName.text = [counterList.name stringByAppendingString:[NSString stringWithFormat:@"·%@",counterList.enname]];
-     //加载网络图片方法（UIImageView+SDWedImage中）
-    [_contentImage downloadImage:_counterList.coverimg];
+    
+    
+    //[_contentImageTwo downloadImage:[_counterList.imglist[1] valueForKey:@"imglist"]];
+    
     _contentLabelTitle.text = _counterList.title;
     _contentLabelDetails.text = _counterList.playInfo.shareinfo.text;
     _LikeLabelNumber.text = [NSString stringWithFormat:@"%li",counterList.like];
@@ -53,14 +59,38 @@
     
     CGFloat imageHeight = [_heightDic[@"imageHeight"] floatValue];
     CGFloat textHeight = [_heightDic[@"textHeight"] floatValue];
-    NSLog(@"----------%lf---------%lf",imageHeight,textHeight);
+    CGFloat titleHeight = [_heightDic[@"titleHeight"] floatValue];
     if (imageHeight == 0) {
-        _contentLabelDetails.frame = CGRectMake(20, 70, VIEW_WIDTH-40, textHeight);
+        
         _contentImage.frame = CGRectMake(20, 70, VIEW_WIDTH-40, 0);
         
+        _contentLabelTitle.frame = CGRectMake(20, 70, VIEW_WIDTH-40, titleHeight);
+        _contentLabelDetails.frame = CGRectMake(20, titleHeight+80, VIEW_WIDTH-40, textHeight);
+        
     }else{
-        _contentImage.frame = CGRectMake(20, 70, VIEW_WIDTH-40, imageHeight);
-        _contentLabelDetails.frame = CGRectMake(20, imageHeight+80, VIEW_WIDTH-40, textHeight);
+        if(counterList.imglist.count >= 3){
+            _contentImage.frame = CGRectMake(20, 70, VIEW_WIDTH-40, imageHeight/2);
+            _contentImageTwo.frame = CGRectMake(20, imageHeight/2 + 70 + 5, VIEW_WIDTH/2-20-2, imageHeight/2);
+            _contentImageThree.frame = CGRectMake( 2+VIEW_WIDTH/2, imageHeight/2 + 70 + 5, VIEW_WIDTH/2 - 20- 2, imageHeight/2);
+            
+            _contentLabelTitle.frame = CGRectMake(20, imageHeight+80, VIEW_WIDTH-40, titleHeight);
+            _contentLabelDetails.frame = CGRectMake(20, imageHeight+titleHeight+80+10, VIEW_WIDTH-40, textHeight);
+            //加载网络图片方法（UIImageView+SDWedImage中）
+            //Imglist *list = _counterList.imglist[0];
+            
+            [_contentImage downloadImage:[_counterList.imglist[0] imgurl]];
+            [_contentImageTwo downloadImage:[_counterList.imglist[1] imgurl]];
+            
+            [_contentImageThree downloadImage:[_counterList.imglist[2] imgurl]];
+            
+        }else if (counterList.imglist.count == 1){
+            _contentImage.frame = CGRectMake(20, 70, VIEW_WIDTH-40, imageHeight);
+            _contentLabelTitle.frame = CGRectMake(20, imageHeight+80, VIEW_WIDTH-40, titleHeight);
+            _contentLabelDetails.frame = CGRectMake(20, imageHeight+titleHeight+80+10, VIEW_WIDTH-40, textHeight);
+            //加载网络图片方法（UIImageView+SDWedImage中）
+            
+            [_contentImage downloadImage:_counterList.coverimg];
+        }
     }
 }
 //不用model用字典进行赋值时用的数据
@@ -69,7 +99,7 @@
     _userName.text = [dataDic[@"name"] stringByAppendingString:[NSString stringWithFormat:@"·%@",dataDic[@"enname"]]];
     //加载网络图片方法（UIImageView+SDWedImage中）
     [_contentImage downloadImage: dataDic[@"coverimg"]];
-    
+    [_contentImageTwo downloadImage:dataDic[@"coverimg"]];
     _contentLabelTitle.text = dataDic[@"title"];
     _contentLabelDetails.text = [[dataDic[@"playInfo"] valueForKey:@"shareinfo"]  valueForKey:@"text"];
     
@@ -80,14 +110,18 @@
     
     CGFloat imageHeight = [_heightDic[@"imageHeight"] floatValue];
     CGFloat textHeight = [_heightDic[@"textHeight"] floatValue];
-    NSLog(@"----------%lf---------%lf",imageHeight,textHeight);
+    CGFloat titleHeight = [_heightDic[@"titleHeight"] floatValue];
+    
     if (imageHeight == 0) {
-        _contentLabelDetails.frame = CGRectMake(20, 70, VIEW_WIDTH-40, textHeight);
+        
+        _contentLabelTitle.frame = CGRectMake(20, 70, VIEW_WIDTH-40, titleHeight);
+        _contentLabelDetails.frame = CGRectMake(20, titleHeight+80, VIEW_WIDTH-40, textHeight);
         _contentImage.frame = CGRectMake(20, 70, VIEW_WIDTH-40, 0);
         
     }else{
         _contentImage.frame = CGRectMake(20, 70, VIEW_WIDTH-40, imageHeight);
-        _contentLabelDetails.frame = CGRectMake(20, imageHeight+80, VIEW_WIDTH-40, textHeight);
+        _contentLabelTitle.frame = CGRectMake(20, imageHeight+80, VIEW_WIDTH-40, titleHeight);
+        _contentLabelDetails.frame = CGRectMake(20, imageHeight+titleHeight+80+10, VIEW_WIDTH-40, textHeight);
     }
 
 }
@@ -135,6 +169,19 @@
     }
     return _contentImage;
 }
+- (UIImageView *)contentImageTwo{
+    if(!_contentImageTwo){
+        _contentImageTwo = [[UIImageView alloc]init];
+    }
+    return _contentImageTwo;
+}
+- (UIImageView *)contentImageThree{
+    if(!_contentImageThree){
+        _contentImageThree = [[UIImageView alloc]init];
+    }
+    return _contentImageThree;
+}
+
 - (UILabel *)contentLabelTitle{
     if(!_contentLabelTitle){
         _contentLabelTitle = [[UILabel alloc]init];

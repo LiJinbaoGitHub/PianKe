@@ -25,6 +25,10 @@
 @property (strong, nonatomic)  UIButton* lightningButton;
 @property (strong, nonatomic)  UIButton* debrisButton;
 @property (strong, nonatomic)  PKFlagView* flageTableView; // table
+@property (assign,nonatomic)   NSInteger start;
+@property (strong,nonatomic)   NSMutableArray* height;
+
+
 
 @end
 
@@ -36,9 +40,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    self.flageTableView.flageModel = [NSMutableArray array];
+    self.height = [NSMutableArray array];
+    WS(weakSelf);
+    
+    self.start = 10;
+    self.flageTableView.NewDataBlock = ^(){
+        
+        [weakSelf reloadFragmentTabelData:0];
+    };
+    self.flageTableView.MoreDataBlock = ^(){
+      
+        [weakSelf reloadFragmentTabelData:weakSelf.start];
+        weakSelf.start+=10;
+    };
+    
     [self.navigationController setNavigationBarHidden:YES];
-   
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     //自定义VIEW 替代self.navigation
@@ -107,7 +125,7 @@
     mainScrollView.showsHorizontalScrollIndicator = NO;
     mainScrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:mainScrollView];
-
+    
     self.topView = topView;
     self.scrollView = mainScrollView;
     self.flagButton = flagButton;
@@ -115,28 +133,20 @@
     self.debrisButton = debrisButton;
     [self.view bringSubviewToFront:self.topView];
     [flagView addSubview:self.flageTableView];
-
+    
     [self reloadFragmentTabelData:0];
-    //
-    WS(weakSelf);
-    //上拉加载的block回调方法
-    self.flageTableView.MoreDataBlock = ^(){
-        // 隐藏当前的上拉刷新控件
-        [weakSelf reloadFragmentTabelData:0];
-    };
-    //下拉加载的block回调方法
-    self.flageTableView.NewDataBlock = ^(){
-        [weakSelf reloadFragmentTabelData:10];
-    };
     
 }
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-
+    
 }
 ///网络请求数据
 - (void)reloadFragmentTabelData:(NSInteger)start{
-    //制作请求参数
+    
+    WS(weakSelf);
+    
+        //制作请求参数
     NSDictionary *requestDic =@{
                                 @"auth":@"",
                                 @"client":@"1",
@@ -145,24 +155,39 @@
                                 @"start":[NSString stringWithFormat:@"%li",start],
                                 @"version":@"3.0.6"
                                 };
-    WS(weakSelf);
     //开始网络请求
     [self POSTHttpRequest:@"http://api2.pianke.me/pub/today" dic:requestDic successBlock:^(id JSON) {
         NSLog(@"%@",JSON);
         NSDictionary *returnDic = JSON;
         if ([returnDic[@"result"]integerValue] == 1) {
+            
+            if (start == 0) {
+                
+                [weakSelf.flageTableView.flageModel removeAllObjects];
+                [weakSelf.height removeAllObjects];
+                
+            };
+
             //将得到的模型转换成model
+            
             weakSelf.flageTableView.flagListModel = [[PKFlagListModel alloc]initWithDictionary:returnDic];
+            
+            
+            
             NSArray *heightArray = [NSArray countCellHeight:weakSelf.flageTableView.flagListModel.data.list];
+            [self.height addObjectsFromArray:heightArray];
             
             //tableview用来存储数据的数组
-            self.flageTableView.flageModel = self.flageTableView.flagListModel.data.list;
+//            self.flageTableView.flageModel = self.flageTableView.flagListModel.data.list;
+            
+            [self.flageTableView.flageModel addObjectsFromArray:self.flageTableView.flagListModel.data.list];
             
             //轮播图片数据
             self.flageTableView.scrollArray = [returnDic[@"data"] valueForKey:@"carousel"];
             
             //给tableviewcell高度的数组赋值
-            weakSelf.flageTableView.cellHeightArray = heightArray;
+            weakSelf.flageTableView.cellHeightArray = self.height;
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.flageTableView reloadData];
             });
@@ -178,6 +203,8 @@
     
     
 }
+
+
 - (void)doClickBackAction{
     
     [self.sideMenuViewController presentLeftMenuViewController];
@@ -191,10 +218,10 @@
     
     for (UIView* view in [self.topView subviews]) {
         if ([view isKindOfClass:[UIButton class]]&& (view != sender)) {
-        
+            
             UIButton* btn = (UIButton*)view;
             btn.selected = NO;
-        
+            
         }
     }
     
@@ -215,9 +242,9 @@
         [self.scrollView setContentOffset:CGPointMake(VIEW_WIDTH*2, 0) animated:YES];
         
     }
-
     
-
+    
+    
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -235,14 +262,14 @@
         
         [self addChildVC:self.debrisButton];
     }
-
+    
     
 }
 
 - (PKFlagView *)flageTableView{
     if (!_flageTableView) {
         _flageTableView = [[PKFlagView alloc] initWithFrame:CGRectMake(0, 0, VIEW_WIDTH, VIEW_HEIGHT) style:UITableViewStyleGrouped];
-        self.flageTableView.bounces = NO;
+       
     }
     return _flageTableView;
 }

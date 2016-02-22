@@ -20,6 +20,7 @@
 @interface PKFlagView()<UITableViewDataSource,UITableViewDelegate>
 
 @property (strong, nonatomic)          PKBaseViewController * baseViewCon;
+@property (assign, nonatomic)          NSInteger pageNumber;
 @end
 
 
@@ -32,9 +33,11 @@
         
         self.dataSource = self;
         self.delegate = self;
-        
+        //添加mj刷新
         [self addRefreshControl];
         
+        
+        //表格复用
         [self registerClass:[PKFlageTableViewCell class] forCellReuseIdentifier:@"cell"];
         [self registerClass:[PKFlageListTableViewCell class] forCellReuseIdentifier:@"cellTwo"];
 
@@ -69,7 +72,8 @@
     if(section == 0){
         return 1;
     }
-    return _cellHeightArray.count;;
+    NSLog(@"----------------%li",self.flageModel.count);
+    return self.flageModel.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
@@ -102,14 +106,14 @@
     
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
 
-    if (_cellHeightArray) {
-        if ([cell isKindOfClass:[PKFlageListTableViewCell class]]) {
-            //传给cell的高度字典
-            [((PKFlageListTableViewCell *)cell) setHeightDic:(NSDictionary *)_cellHeightArray[indexPath.row]];
-            //传给cell的内容模型
-            ((PKFlageListTableViewCell *)cell).counterList = _flageModel[indexPath.row];
-        }
-    }
+//    if (_cellHeightArray) {
+//        if ([cell isKindOfClass:[PKFlageListTableViewCell class]]) {
+//            //传给cell的高度字典
+//            [((PKFlageListTableViewCell *)cell) setHeightDic:(NSDictionary *)_cellHeightArray[indexPath.row]];
+//            //传给cell的内容模型
+//            ((PKFlageListTableViewCell *)cell).counterList = _flageModel[indexPath.row];
+//        }
+//    }
     //传轮播图片给，PKFlageTableViewCell，中的array
     if (indexPath.section == 0) {
         NSMutableArray* array = [NSMutableArray array];
@@ -119,6 +123,11 @@
         }
         [((PKFlageTableViewCell*)cell) setScroImageWithArray:array];
         
+    }
+    if (indexPath.section == 1) {
+        [((PKFlageListTableViewCell *)cell) setHeightDic:(NSDictionary *)_cellHeightArray[indexPath.row]];
+        //传给cell的内容模型
+        ((PKFlageListTableViewCell *)cell).counterList = self.flageModel[indexPath.row];
     }
     return cell;
 }

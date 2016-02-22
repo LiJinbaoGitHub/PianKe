@@ -15,7 +15,7 @@ typedef void(^loadMoreDataBlock)();//加载更多数据
 
 @interface PKFlagView : UITableView
 
-@property (strong, nonatomic)           NSArray *flageModel;//碎片数据
+@property (strong, nonatomic)           NSMutableArray *flageModel;//碎片数据
 @property (strong, nonatomic)           NSArray *cellHeightArray;//高度数组
 @property (copy, nonatomic)             loadNewDataBlock NewDataBlock;
 @property (copy, nonatomic)             loadMoreDataBlock MoreDataBlock;
