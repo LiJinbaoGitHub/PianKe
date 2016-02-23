@@ -16,6 +16,8 @@
 
 @property (strong, nonatomic) PKFragmentModel * fragmentModel;
 @property (strong, nonatomic) PKFragmentTable * fragmentTable;
+@property (assign, nonatomic) NSInteger start;
+@property (strong, nonatomic) NSMutableArray * height;
 
 @end
 
@@ -29,6 +31,21 @@
     [self reloadFragmentTableDate:0];
     
     [self addNavLeftBackBtnMeun];
+    //自定义VIEW
+    UIView* topView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, VIEW_WIDTH, 44)];
+    [topView setBackgroundColor:RGB(255 , 255, 255)];
+    [self.view addSubview:topView];
+    //菜单按钮
+    UIImage* backImage = [UIImage imageNamed:@"菜单"];
+    CGRect backframe = CGRectMake(0,0,45,45);
+    UIButton* backButton= [[UIButton alloc] initWithFrame:backframe];
+    [backButton setBackgroundImage:backImage forState:UIControlStateNormal];
+    
+    [backButton addTarget:self action:@selector(doClickBackAction) forControlEvents:UIControlEventTouchUpInside];
+    [topView addSubview:backButton];
+    
+    //可变数组初始化
+    self.height = [NSMutableArray array];
 }
 //自动布局
 - (void)addAutoLayout{
@@ -43,12 +60,14 @@
         _fragmentTable = [[PKFragmentTable alloc]initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStylePlain];
         WS(weakSelf);
         //上拉 加载block 回调方法
+        self.start = 10;
         _fragmentTable.NewDateBlock = ^(){
             [weakSelf reloadFragmentTableDate:0];
         };
         //下拉 加载block 回调方法
         _fragmentTable.MoreDateBlock = ^(){
-            [weakSelf reloadFragmentTableDate:10];
+            [weakSelf reloadFragmentTableDate:weakSelf.start];
+            weakSelf.start += 10;
         };
     }
     return _fragmentTable;
@@ -69,15 +88,24 @@
     [self POSTHttpRequest:@"http://api2.pianke.me/timeline/list" dic:requestDic successBlock:^(id JSON) {
         NSDictionary * returnDic = JSON;
         if([returnDic[@"result"] integerValue] == 1){
+            
+            if (start == 0) {
+                [weakSelf.fragmentTable.FragmentMedelArray removeAllObjects];
+                [weakSelf.height removeAllObjects];
+            };
+
             //将得到的模型转换成model
-            weakSelf.fragmentModel = [[PKFragmentModel alloc]initWithDictionary:returnDic];
+            weakSelf.fragmentModel = [[PKFragmentModel alloc] initWithDictionary:returnDic];
             NSArray * heightArray = [NSArray contentCellHeight:weakSelf.fragmentModel.data.list];
             
-            //用来存储数据的的数组
-            weakSelf.fragmentTable.FragmentMedelArray = weakSelf.fragmentModel.data.list;
+            [weakSelf.height addObjectsFromArray:heightArray];
             
+            //用来存储数据的的数组
+            for (id obj in weakSelf.fragmentModel.data.list) {
+                [weakSelf.fragmentTable.FragmentMedelArray addObject:obj];
+            }
             // 给 tableViewCell的高度数组 赋值
-            weakSelf.fragmentTable.FragmentCellHeihtArray = heightArray;
+            weakSelf.fragmentTable.FragmentCellHeihtArray = weakSelf.height;;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.fragmentTable reloadData];
@@ -98,6 +126,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 
+}
+- (void)doClickBackAction{
+    
+    [self.sideMenuViewController presentLeftMenuViewController];
+    
 }
 
 

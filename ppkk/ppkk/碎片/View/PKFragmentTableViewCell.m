@@ -185,6 +185,7 @@
 
 //通过set方法在counterList刚被赋值时，对其他控件进行赋值
 - (void)setCounterList:(PKFragmentList *)counterList{
+    
     _counterList = counterList;
     [_iconImage downloadImage:counterList.userinfo.icon];//SDWebImage缓存图片
     _userName.text = counterList.userinfo.uname;
@@ -194,7 +195,9 @@
     //加载网络图片的方法 (UIImageView + SDWedImage)
     [_contentImage downloadImage:_counterList.coverimg];
     //lable调用属性字符串
-    _contentLable.attributedText = [self makeText:counterList.content];
+    if (counterList.counterList) {
+        _contentLable.attributedText = [self makeText:counterList.content];
+    }
     
     CGFloat imageHeight = [_heightDic[@"imageHeight"] floatValue];
     CGFloat textHeight = [_heightDic[@"textHeight"] floatValue];
@@ -241,7 +244,7 @@
 }
 
 //生成属性字符串
-- (NSAttributedString *)makeText : (NSString *)exampleSting{
+- (NSAttributedString *)makeText : (NSString *)exampleSting {
     //段落类型
     NSMutableParagraphStyle * paragraph = [[NSMutableParagraphStyle alloc]init];
     //行间距

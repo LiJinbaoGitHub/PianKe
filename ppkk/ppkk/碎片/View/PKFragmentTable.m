@@ -19,6 +19,15 @@
 @end
 @implementation PKFragmentTable
 
+- (NSMutableArray *)FragmentMedelArray {
+
+    if (_FragmentMedelArray == nil) {
+        _FragmentMedelArray = [NSMutableArray array];
+    }
+    return _FragmentMedelArray;
+
+}
+
 -(instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style{
     self = [super initWithFrame:frame style:style];
     if(self){
@@ -46,22 +55,25 @@
     self.mj_header = header;
     
     //下拉刷新
-    MJChiBaoZiFooter2 * footer = [MJChiBaoZiFooter2 footerWithRefreshingTarget:self refreshingAction:@selector(MoreDateBlock)];
+    MJChiBaoZiFooter2 * footer = [MJChiBaoZiFooter2 footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreDate)];
     footer.stateLabel.hidden = YES;
     footer.automaticallyChangeAlpha = YES;
     self.mj_footer = footer;
 }
 //上拉刷新
 - (void)loadNewDate{
-    if(!_NewDateBlock){
+    
+//    if(!_NewDateBlock){
         _NewDateBlock();
-    }
+//    }
 }
 //下拉刷新
 - (void)loadMoreDate{
-    if(!_MoreDateBlock){
+   
+    
+//    if(!_MoreDateBlock){
         _MoreDateBlock();
-    }
+//    }
 }
 #pragma mark -UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

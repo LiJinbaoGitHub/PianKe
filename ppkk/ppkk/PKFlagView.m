@@ -72,16 +72,14 @@
     if(section == 0){
         return 1;
     }
-    NSLog(@"----------------%li",self.flageModel.count);
+
     return self.flageModel.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
         return 180;
     }
-    NSLog(@"%@", _cellHeightArray);
     CGFloat height = [[_cellHeightArray[indexPath.row] valueForKey:@"cellHeight"] floatValue];
-    NSLog(@"heitht %lf",height);
     return height;
 }
 

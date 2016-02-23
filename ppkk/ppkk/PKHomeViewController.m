@@ -172,9 +172,8 @@
             
             weakSelf.flageTableView.flagListModel = [[PKFlagListModel alloc]initWithDictionary:returnDic];
             
-            
-            
             NSArray *heightArray = [NSArray countCellHeight:weakSelf.flageTableView.flagListModel.data.list];
+            
             [self.height addObjectsFromArray:heightArray];
             
             //tableview用来存储数据的数组

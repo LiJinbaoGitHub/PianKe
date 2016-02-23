@@ -36,7 +36,7 @@
                 //字符串截取
                 NSArray *array = [ImageSize componentsSeparatedByString:@"*"];
                 //根据宽高比计算高度
-                imageH = [array[1] floatValue]*((VIEW_WIDTH-40.0)/[array[0] floatValue]) * 1.3;
+                imageH = ([array[1] floatValue]*((VIEW_WIDTH-40.0)/[array[0] floatValue]) )* 1.3;
             }
         }
         //转换成number类型数据存入字典

@@ -48,7 +48,6 @@
     _counterList = counterList;
     _userName.text = [counterList.name stringByAppendingString:[NSString stringWithFormat:@"·%@",counterList.enname]];
     
-    
     //[_contentImageTwo downloadImage:[_counterList.imglist[1] valueForKey:@"imglist"]];
     
     _contentLabelTitle.text = _counterList.title;
@@ -83,7 +82,7 @@
             
             [_contentImageThree downloadImage:[_counterList.imglist[2] imgurl]];
             
-        }else if (counterList.imglist.count == 1){
+        }else if (counterList.imglist.count < 3){
             _contentImage.frame = CGRectMake(20, 70, VIEW_WIDTH-40, imageHeight);
             _contentLabelTitle.frame = CGRectMake(20, imageHeight+80, VIEW_WIDTH-40, titleHeight);
             _contentLabelDetails.frame = CGRectMake(20, imageHeight+titleHeight+80+10, VIEW_WIDTH-40, textHeight);
@@ -100,6 +99,7 @@
     //加载网络图片方法（UIImageView+SDWedImage中）
     [_contentImage downloadImage: dataDic[@"coverimg"]];
     [_contentImageTwo downloadImage:dataDic[@"coverimg"]];
+    //[];
     _contentLabelTitle.text = dataDic[@"title"];
     _contentLabelDetails.text = [[dataDic[@"playInfo"] valueForKey:@"shareinfo"]  valueForKey:@"text"];
     

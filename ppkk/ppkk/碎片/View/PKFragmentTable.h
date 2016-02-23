@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class PKFragmentModel;
 
 typedef void(^loadNewDateBlock)(); //上拉加载新数据
 typedef void(^loadMoreDateBlock)(); // 下拉加载更多数据
@@ -16,7 +16,8 @@ typedef void(^loadMoreDateBlock)(); // 下拉加载更多数据
 
 @property (copy, nonatomic) loadNewDateBlock NewDateBlock;
 @property (copy, nonatomic) loadMoreDateBlock MoreDateBlock;
-@property (strong, nonatomic) NSArray * FragmentMedelArray; // 碎片数据
+@property (strong, nonatomic) NSMutableArray * FragmentMedelArray; // 碎片数据
 @property (strong, nonatomic) NSArray * FragmentCellHeihtArray; // 碎片高度数据
+@property (strong, nonatomic) PKFragmentModel * fragmentModel;
 
 @end
